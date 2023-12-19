@@ -75,7 +75,7 @@ void setup()
     Serial.println("Connected to WiFi");
 
     // Init and get the time
-    sntp_set_sync_interval(1 * 60 * 60 * 1000UL); // 12 hours
+    sntp_set_sync_interval(12 * 60 * 60 * 1000UL); // 12 hours
     sntp_set_time_sync_notification_cb(cbSyncTime);  // set a Callback function for time synchronization notification
     configTime(0, 0, ntpServer);
 
