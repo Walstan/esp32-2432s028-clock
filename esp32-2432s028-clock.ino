@@ -64,23 +64,6 @@ void setup()
 {
     Serial.begin(115200);
 
-    WiFi.begin(SSID, wifi_password);
-    while (WiFi.status() != WL_CONNECTED)
-    {
-      delay(1000);
-      Serial.println("Connecting to WiFi...");
-    }
-    Serial.println("Connected to WiFi");
-
-    // Init and get the time
-    sntp_set_sync_interval(12 * 60 * 60 * 1000UL); // 12 hours
-    sntp_set_time_sync_notification_cb(cbSyncTime);  // set a Callback function for time synchronization notification
-    configTime(0, 0, ntpServer);
-
-    setTimezone(timezone);
-
-    printLocalTime();
-
     tft.begin();
     tft.setRotation(1);
     tft.setBrightness(32);
@@ -138,6 +121,30 @@ void setup()
     lv_obj_set_pos(label3, 0, 240-30);
 
     lv_scr_load(screenMain);
+
+    char status[64];
+    snprintf(status, 64, "Connecting to %s", SSID);
+    lv_label_set_text(label1, status);
+
+    // Update screen
+    lv_timer_handler();
+
+    WiFi.begin(SSID, wifi_password);
+    while (WiFi.status() != WL_CONNECTED)
+    {
+      delay(1000);
+      Serial.println("Connecting to WiFi...");
+    }
+    Serial.println("Connected to WiFi");
+
+    // Init and get the time
+    sntp_set_sync_interval(12 * 60 * 60 * 1000UL); // 12 hours
+    sntp_set_time_sync_notification_cb(cbSyncTime);  // set a Callback function for time synchronization notification
+    configTime(0, 0, ntpServer);
+
+    setTimezone(timezone);
+
+    printLocalTime();
 
     Serial.println("Setup ended!");
 }
