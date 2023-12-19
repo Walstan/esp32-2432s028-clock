@@ -13,8 +13,6 @@ Adapted from https://docs.lvgl.io/master/widgets/chart.html
 #include <lvgl.h>
 
 #include <WiFi.h>
-#include <HTTPClient.h>
-#include <ArduinoJson.h>
 
 #include "esp_sntp.h"
 #include "time.h"
