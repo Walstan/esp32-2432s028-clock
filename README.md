@@ -10,13 +10,13 @@ I wanted an NTP clock with time zones and automatic daylight savings time.  ESP3
 
 ## Build
 
-These instructions have been tested with Ubuntu 22.04.3 and Ardino IDE 2.0.2.
+These instructions have been tested with Ubuntu 22.04.3, Windows 10 and Arduino IDE 2.0.2.
 
-- brltty is an app for blind people, but it interferes with ESP32-2432S028 and must be removed.
+- [Ubuntu only] brltty is an app for blind people, but it interferes with ESP32-2432S028 and must be removed.
 
     `sudo apt purge brltty`
 
-- Arduino IDE requires pyserial
+- [Ubuntu only] Arduino IDE requires pyserial
 
     `pip install pyserial`
 
@@ -25,9 +25,11 @@ These instructions have been tested with Ubuntu 22.04.3 and Ardino IDE 2.0.2.
 
     Board is `ESP32 Dev Module`
 
-    Port is `/dev/ttyUSB0`
+    Port is `/dev/ttyUSB0` [Ubuntu]
 
-    IDE will ask if you want to download and install esp32
+    Port is `COM??` [Windows]
+
+    IDE will ask if you want to download and install esp32.  The name has changed so you may have to select `ESP32 Dev Board` and later change to `ESP32 Dev Module`.
 
 - **Required libraries** · Use `Manage Libraries...` to install the `LovyanGFX(1.1.9)` and `lvgl(8.3.11)` libraries.
 - **Clone repository**
