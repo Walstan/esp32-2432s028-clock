@@ -15,7 +15,7 @@ const char *time_format = "%H:%M:%S";   // eg. 16:45:23
 //const char *time_format = "%l:%M %p";   // eg. 4:45 PM
 
 // Timezone strings from https://github.com/nayarsystems/posix_tz_db/blob/master/zones.csv
-char *timezone = "PST8PDT,M3.2.0,M11.1.0";      char *timezone_text = "San Francisco";
+char *timezone = "PST8PDT,M3.2.0,M11.1.0";      char *timezone_text = "Berkeley";
 // char *timezone = "MST7MDT,M3.2.0,M11.1.0";      char *timezone_text = "Denver";
 // char *timezone = "CST6CDT,M3.2.0,M11.1.0";      char *timezone_text = "Chicago";
 // char *timezone = "EST5EDT,M3.2.0,M11.1.0";      char *timezone_text = "New York";
