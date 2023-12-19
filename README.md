@@ -29,7 +29,7 @@ These instructions have been tested with Ubuntu 22.04.3 and Ardino IDE 2.0.2.
 
     IDE will ask if you want to download and install esp32
 
-- **Required libraries** · Use `Manage Libraries...` to install the `LovyanGFX` and `lvgl` libraries.
+- **Required libraries** · Use `Manage Libraries...` to install the `LovyanGFX(1.1.9)` and `lvgl(8.3.11)` libraries.
 - **Clone repository**
 
     `cd ~/Arduino/`
@@ -41,7 +41,7 @@ These instructions have been tested with Ubuntu 22.04.3 and Ardino IDE 2.0.2.
 
 - Connect ESP32-2432S028 to your computer with micro USB cable.
 
-Build and install using Arduino IDE
+- **Build and Install using Arduino IDE**
 
 ## Notes
 
