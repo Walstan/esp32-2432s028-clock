@@ -4,12 +4,21 @@
  */
 
 
-char * SSID = "asdf";
-char * wifi_password = "asdfasdf";
+const char *SSID = "YOUR SSID";
+const char *wifi_password = "YOUR PASSWORD";
 
-// API urls
-char * url1 = "https://api.open-meteo.com/v1/forecast?latitude=40.416775&longitude=-3.703790&current_weather=true&timezone=Europe%2FBerlin";
-char * url2 = "https://api.open-meteo.com/v1/forecast?latitude=40.416775&longitude=-3.703790&current_weather=true&hourly=temperature_2m,weathercode&forecast_days=2&timezone=Europe%2FBerlin";
+// NTP server
+const char *ntpServer = "pool.ntp.org";
 
-// number of periods/hours to keep in the charts
-const uint16_t history_size = 24;
+// strftime() time format
+const char *time_format = "%H:%M:%S";   // eg. 16:45:23
+//const char *time_format = "%l:%M %p";   // eg. 4:45 PM
+
+// Timezone strings from https://github.com/nayarsystems/posix_tz_db/blob/master/zones.csv
+char *timezone = "PST8PDT,M3.2.0,M11.1.0";      char *timezone_text = "San Francisco";
+// char *timezone = "MST7MDT,M3.2.0,M11.1.0";      char *timezone_text = "Denver";
+// char *timezone = "CST6CDT,M3.2.0,M11.1.0";      char *timezone_text = "Chicago";
+// char *timezone = "EST5EDT,M3.2.0,M11.1.0";      char *timezone_text = "New York";
+// char *timezone = "GMT0BST,M3.5.0/1,M10.5.0";    char *timezone_text = "London";
+// char *timezone = "CET-1CEST,M3.5.0,M10.5.0/3";  char *timezone_text = "Berlin";
+// char *timezone = "JST-9";                       char *timezone_text = "Tokyo";

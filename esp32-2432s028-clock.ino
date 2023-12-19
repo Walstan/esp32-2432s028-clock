@@ -16,6 +16,8 @@ Adapted from https://docs.lvgl.io/master/widgets/chart.html
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
+#include "esp_sntp.h"
+#include "time.h"
 #include "config.h"
 
 
@@ -28,20 +30,23 @@ static lv_color_t buf[ screenWidth * 10 ];
 
 lv_obj_t *screenMain;
 
-lv_obj_t *chart;
-lv_chart_series_t * ser1;
-lv_chart_series_t * ser2;
-
 lv_obj_t *label1;
 lv_obj_t *label2;
 lv_obj_t *label3;
 
-char *lab_1_text = "Label 1";
-char *lab_2_text = "Label 2";
-char *lab_3_text = "Label 3";
+void setTimezone(String timezone)
+{
+  Serial.printf("Setting Timezone to %s\n",timezone.c_str());
+  setenv("TZ",timezone.c_str(),1);  //  Now adjust the TZ.  Clock settings are adjusted to show the new local time
+  tzset();
+}
 
-bool first_refresh;
-
+// callback function to show when NTP was synchronized
+void cbSyncTime(struct timeval *tv)
+{
+  Serial.println(F("NTP time synched"));
+  printLocalTime();
+}
 
 // /* Display flushing */
 void my_disp_flush( lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p )
@@ -57,9 +62,26 @@ void my_disp_flush( lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *colo
    lv_disp_flush_ready( disp );
 }
 
-void setup() {
-
+void setup()
+{
     Serial.begin(115200);
+
+    WiFi.begin(SSID, wifi_password);
+    while (WiFi.status() != WL_CONNECTED)
+    {
+      delay(1000);
+      Serial.println("Connecting to WiFi...");
+    }
+    Serial.println("Connected to WiFi");
+
+    // Init and get the time
+    sntp_set_sync_interval(1 * 60 * 60 * 1000UL); // 12 hours
+    sntp_set_time_sync_notification_cb(cbSyncTime);  // set a Callback function for time synchronization notification
+    configTime(0, 0, ntpServer);
+
+    setTimezone(timezone);
+
+    printLocalTime();
 
     tft.begin();
     tft.setRotation(1);
@@ -82,195 +104,80 @@ void setup() {
     lv_disp_drv_register(&disp_drv);
 
     screenMain = lv_obj_create(NULL);
+    lv_obj_set_style_bg_color(screenMain, lv_color_black(), LV_PART_MAIN);
 
-    chart = lv_chart_create(screenMain);
-    lv_obj_set_size(chart, 280, 200);
-    lv_obj_set_pos(chart, 35, 5);
-    lv_chart_set_type(chart, LV_CHART_TYPE_LINE);   /*Show lines and points too*/
-    lv_chart_set_point_count(chart, history_size);
+    LV_FONT_DECLARE(opensans_30);
+    LV_FONT_DECLARE(opensans_90);
 
-    ser1 = lv_chart_add_series(chart, lv_palette_main(LV_PALETTE_RED),   LV_CHART_AXIS_PRIMARY_Y);
-    ser2 = lv_chart_add_series(chart, lv_palette_main(LV_PALETTE_GREEN), LV_CHART_AXIS_SECONDARY_Y);
+    static lv_style_t style_font1;
+    lv_style_init(&style_font1);
+    lv_style_set_text_font(&style_font1, &opensans_30);
 
-    for (int i = 0; i < history_size; i++) {
-        lv_chart_set_next_value(chart, ser1, 0);
-        lv_chart_set_next_value(chart, ser2, 0);
-    }
-
-    lv_chart_refresh(chart);
+    static lv_style_t style_font2;
+    lv_style_init(&style_font2);
+    lv_style_set_text_font(&style_font2, &opensans_90);
 
     label1 = lv_label_create(screenMain);
-    lv_label_set_text(label1, lab_1_text);
-    lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN);
-    lv_obj_set_size(label1, 150, 25);
-    lv_obj_set_pos(label1, 5, 215);
+    lv_obj_add_style(label1, &style_font1, 0);
+    lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+    lv_obj_set_style_text_color(label1, lv_color_hex(0xffffff), LV_PART_MAIN);
+    lv_obj_set_size(label1, 320, 30);
+    lv_obj_set_pos(label1, 0, 0);
 
     label2 = lv_label_create(screenMain);
-    lv_label_set_text(label2, lab_2_text);
-    lv_obj_set_style_text_align(label2, LV_TEXT_ALIGN_RIGHT, LV_PART_MAIN);
-    lv_obj_set_size(label2, 80, 25);
-    lv_obj_set_pos(label2, 160, 215);
+    lv_obj_add_style(label2, &style_font2, 0);
+    lv_obj_set_style_text_align(label2, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+    lv_obj_set_style_text_color(label2, lv_color_hex(0xffffff), LV_PART_MAIN);
+    lv_obj_set_size(label2, 320, 80);
+    lv_obj_set_pos(label2, 0, (240-80)/2);
 
     label3 = lv_label_create(screenMain);
-    lv_label_set_text(label3, lab_3_text);
-    lv_obj_set_style_text_align(label3, LV_TEXT_ALIGN_RIGHT, LV_PART_MAIN);
-    lv_obj_set_size(label3, 75, 25);
-    lv_obj_set_pos(label3, 240, 215);
+    lv_label_set_text(label3, timezone_text);
+    lv_obj_add_style(label3, &style_font1, 0);
+    lv_obj_set_style_text_align(label3, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+    lv_obj_set_style_text_color(label3, lv_color_hex(0xffffff), LV_PART_MAIN);
+    lv_obj_set_size(label3, 320, 30);
+    lv_obj_set_pos(label3, 0, 240-30);
 
     lv_scr_load(screenMain);
 
     Serial.println("Setup ended!");
-    first_refresh = true;
-
 }
 
-void loop() {
-
+void loop()
+{
     lv_timer_handler(); /* let the GUI do its work */
 
-    if (first_refresh) first_refresh = false;
-    else delay( 15 * 60 * 1000 );
-
-    Serial.println("Loop start.");
-
-    WiFi.begin(SSID, wifi_password);
-
-    while (WiFi.status() != WL_CONNECTED) {
-
-      delay(1000);
-      Serial.println("Connecting to WiFi...");
-
-    }
-
-    Serial.println("Connected to WiFi");
-
     update_labels();
-    update_chart();
-
-    WiFi.disconnect();
 }
 
-String get_payload(String url) {
+void update_labels()
+{
+  struct tm timeinfo;
+  if(!getLocalTime(&timeinfo))
+  {
+    Serial.println("Failed to obtain time");
+    return;
+  }
 
-    HTTPClient http;
+  char current_date[64];
+  strftime( current_date, 64, "%A, %B %d %Y", &timeinfo );
+  lv_label_set_text(label1, current_date);
 
-    http.begin(url);
-
-    int httpCode = http.GET();
-    Serial.println("http request code: " + httpCode);
-
-    String payload = http.getString();
-    Serial.println(payload);
-
-    http.end();
-
-    return payload;
-
+  char current_time[64];
+  strftime( current_time, 64, time_format, &timeinfo );
+  lv_label_set_text(label2, current_time);
 }
 
-void update_labels() {
-
-    StaticJsonDocument<512> doc;
-    DeserializationError error;
-
-    String payload = get_payload(url1);
-    error = deserializeJson(doc, payload);
-
-    if (error) {
-
-      Serial.print("deserializeJson() failed: ");
-      Serial.println(error.f_str());
-
-    } else {
-
-      char tmp[10];
-      JsonObject current_weather = doc["current_weather"];
-
-      // data time
-      const char *current_time = current_weather["time"];
-      lv_label_set_text(label1, current_time);
-
-      // temperature
-      float current_temperature = current_weather["temperature"];
-      dtostrf(current_temperature, 5, 2, tmp);
-      strcat(tmp, "C");
-      lv_label_set_text(label2, tmp);
-
-      // weather code
-      int wmo_code = current_weather["weathercode"];
-      sprintf(tmp, "%d", wmo_code);
-      lv_label_set_text(label3, tmp);
-
-    }
-
-}
-
-void update_chart() {
-
-    StaticJsonDocument<4096> doc;
-    DeserializationError error;
-
-    Serial.println("getting temperature predictions...");
-
-    String payload = get_payload(url2);
-    error = deserializeJson(doc, payload);
-
-    if (error) {
-
-      Serial.print("deserializeJson() failed: ");
-      Serial.println(error.f_str());
-
-    } else {
-
-      JsonObject current_weather = doc["current_weather"];
-      const char* current_time = current_weather["time"];
-
-      JsonObject hourly = doc["hourly"];
-      JsonArray hourly_time = hourly["time"];
-      JsonArray hourly_temperature_2m = hourly["temperature_2m"];
-      JsonArray hourly_weathercode = hourly["weathercode"];
-
-      int start = 0;
-      int index = 0;
-
-      float max_temp = -100;
-      float min_temp =  100;
-
-      for (int i = 0; i < 48; i++){
-
-          if (strcmp(hourly_time[i], current_time) == 0) {
-              start = 1;
-          }
-
-          Serial.println(i);
-          Serial.println(index);
-
-          if ((start == 1) & (index < history_size)) {
-
-            //Serial.println(index);
-
-            ser1->y_points[index] = hourly_temperature_2m[i];
-            ser2->y_points[index] = hourly_weathercode[i];
-
-            float my_temp = hourly_temperature_2m[i];
-            Serial.println(my_temp);
-
-            if (max_temp < hourly_temperature_2m[i]) max_temp = hourly_temperature_2m[i];
-            if (min_temp > hourly_temperature_2m[i]) min_temp = hourly_temperature_2m[i];
-
-            index++;
-
-          }
-      }
-
-      max_temp = ceil(max_temp);
-      min_temp = floor(min_temp);
-      int breaks = int(1 + (max_temp - min_temp) / 2);
-
-      lv_chart_set_range(chart, LV_CHART_AXIS_PRIMARY_Y, min_temp - 1, max_temp + 1);
-      lv_chart_set_axis_tick(chart, LV_CHART_AXIS_PRIMARY_Y, 10, 5, breaks, 2, true, 30);
-
-      lv_chart_refresh(chart);
-
-    }
+void printLocalTime()
+{
+  struct tm timeinfo;
+  if(!getLocalTime(&timeinfo))
+  {
+    Serial.println("Failed to obtain time");
+  }
+  else
+  {
+    Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S zone %Z %z");
+  }
 }
