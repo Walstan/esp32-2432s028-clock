@@ -4,8 +4,8 @@
  */
 
 
-const char *SSID = "YOUR SSID";
-const char *wifi_password = "YOUR PASSWORD";
+const char *SSID = "YOUR_SSID";
+const char *wifi_password = "YOUR_PASSWORD";
 
 // NTP server
 const char *ntpServer = "pool.ntp.org";
