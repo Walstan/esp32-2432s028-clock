@@ -16,13 +16,20 @@ These instructions have been tested with Ubuntu 22.04.3 and Ardino IDE 2.0.2.
 
     `sudo apt purge brltty`
 
-- [Sunton ESP32 2.8 inch 240*320 TFT with Touch](https://wiki.makerfabs.com/Sunton_ESP32_2.8_inch_240x320_TFT_with_Touch.html) explains how to setup Arduino IDE to use ESP32-2432S028.
+- Arduino IDE requires pyserial
+
+    `pip install pyserial`
+
+- **Start Arduino IDE**
+- **Select Board**
 
     Board is `ESP32 Dev Module`
 
     Port is `/dev/ttyUSB0`
 
-- **Required libraries** · Use the Arduino IDE to install the `LovyanGFX` and `lvgl` libraries.
+    IDE will ask if you want to download and install esp32
+
+- **Required libraries** · Use `Manage Libraries...` to install the `LovyanGFX` and `lvgl` libraries.
 - **Clone repository**
 
     `cd ~/Arduino/`
@@ -32,7 +39,8 @@ These instructions have been tested with Ubuntu 22.04.3 and Ardino IDE 2.0.2.
 - Copy `lv_conf.h` to `~/Arduino/libraries/`. This assumes `lvgl` library is in `~/Arduino/libraries/lvgl/`.
 - Edit `config.h` to input your WiFi ssid/password.
 
-- Connect your ESP32-ESP32-2432S028 with your computer via USB.
+- Connect ESP32-2432S028 to your computer with micro USB cable.
+
 Build and install using Arduino IDE
 
 ## Notes
