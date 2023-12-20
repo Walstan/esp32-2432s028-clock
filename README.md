@@ -55,5 +55,6 @@ I used condensed because display is taller than it needs to be and so date would
 - This project is a fork of https://github.com/cjgb/esp32-2432s028-meteo
 I feel it is fastest to get a project working by starting with something that already works!
 - [NTP with Day Light Saving Time for the ESP32](https://werner.rothschopf.net/microcontroller/202103_arduino_esp32_ntp_en.htm) also explains how to change the NTP update interval.
-- [Sunton ESP32 2.8 inch 240*320 TFT with Touch](https://wiki.makerfabs.com/Sunton_ESP32_2.8_inch_240x320_TFT_with_Touch.html)
+- [Sunton ESP32 2.8 inch 240*320 TFT with Touch](https://wiki.makerfabs.com/Sunton_ESP32_2.8_inch_240x320_TFT_with_Touch.html) describes board and software resources
+- **Schematic** [page 1](img/schematic1.jpg), [page 2](img/schematic2.jpg)
 
