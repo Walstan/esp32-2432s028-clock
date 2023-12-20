@@ -70,6 +70,7 @@ void setup()
     // uint16_t calData[] = {3749, 3619, 3737, 207, 361, 3595, 267, 221};
     // tft.setTouchCalibrate(calData);
 
+    // Initialize lvgl library
     lv_init();
     lv_disp_draw_buf_init( &draw_buf, buf, NULL, screenWidth * 10 );
 
@@ -87,6 +88,7 @@ void setup()
     screenMain = lv_obj_create(NULL);
     lv_obj_set_style_bg_color(screenMain, lv_color_black(), LV_PART_MAIN);
 
+    // Two different sized fonts for text and clock
     LV_FONT_DECLARE(opensans_30);
     LV_FONT_DECLARE(opensans_90);
 
@@ -98,6 +100,8 @@ void setup()
     lv_style_init(&style_font2);
     lv_style_set_text_font(&style_font2, &opensans_90);
 
+    // Screen size is 320x240.  (0,0) is in upper left corner
+    // Set position and color of date.  Font size is set by style_font1
     label1 = lv_label_create(screenMain);
     lv_obj_add_style(label1, &style_font1, 0);
     lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
@@ -105,6 +109,7 @@ void setup()
     lv_obj_set_size(label1, 320, 30);
     lv_obj_set_pos(label1, 0, 0);
 
+    // Set position and color of time.  Font size is set by style_font2
     label2 = lv_label_create(screenMain);
     lv_obj_add_style(label2, &style_font2, 0);
     lv_obj_set_style_text_align(label2, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
@@ -112,6 +117,7 @@ void setup()
     lv_obj_set_size(label2, 320, 80);
     lv_obj_set_pos(label2, 0, (240-80)/2);
 
+    // Set position and color of location.  Font size is set by style_font1
     label3 = lv_label_create(screenMain);
     lv_label_set_text(label3, timezone_text);
     lv_obj_add_style(label3, &style_font1, 0);
@@ -122,6 +128,7 @@ void setup()
 
     lv_scr_load(screenMain);
 
+    // Write wifi connection status to screen
     char status[64];
     snprintf(status, 64, "Connecting to %s", SSID);
     lv_label_set_text(label1, status);
@@ -138,7 +145,7 @@ void setup()
     Serial.println("Connected to WiFi");
 
     // Init and get the time
-    sntp_set_sync_interval(12 * 60 * 60 * 1000UL); // 12 hours
+    sntp_set_sync_interval(12 * 60 * 60 * 1000UL);  // sync clock every 12 hours
     sntp_set_time_sync_notification_cb(cbSyncTime);  // set a Callback function for time synchronization notification
     configTime(0, 0, ntpServer);
 

@@ -4,6 +4,7 @@
  */
 
 
+// Enter your wifi credentials here
 const char *SSID = "YOUR_SSID";
 const char *wifi_password = "YOUR_PASSWORD";
 
@@ -11,6 +12,7 @@ const char *wifi_password = "YOUR_PASSWORD";
 const char *ntpServer = "pool.ntp.org";
 
 // strftime() time format
+// More time and date formatting options here https://linux.die.net/man/3/strftime
 const char *time_format = "%H:%M:%S";   // eg. 16:45:23
 //const char *time_format = "%l:%M %p";   // eg. 4:45 PM
 
