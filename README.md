@@ -31,7 +31,7 @@ These instructions have been tested with Ubuntu 22.04.3, Windows 10 and Arduino 
 
     IDE will ask if you want to install esp32 core.  The name has changed so you may have to select `ESP32 Dev Board` and later change to `ESP32 Dev Module`.
 
-- **Required libraries** · Use `Manage Libraries...` to install the `LovyanGFX(1.1.9)` and `lvgl(8.3.11)` libraries.
+- **Install libraries** · Use `Manage Libraries...` to install `LovyanGFX(1.1.9)` and `lvgl(8.3.11)` libraries.
 - **Clone repository**
 
     `cd ~/Arduino/`
@@ -49,6 +49,7 @@ These instructions have been tested with Ubuntu 22.04.3, Windows 10 and Arduino 
 
 - Fonts were converted with [LVGL Online Font Convertor](https://lvgl.io/tools/fontconverter)
 I used condensed because display is taller than it needs to be and so date would fit on a single line.
+- Schematic [page 1](img/schematic1.jpg), [page 2](img/schematic2.jpg)
 
 ## Thank you
 
@@ -56,5 +57,4 @@ I used condensed because display is taller than it needs to be and so date would
 I feel it is fastest to get a project working by starting with something that already works!
 - [NTP with Day Light Saving Time for the ESP32](https://werner.rothschopf.net/microcontroller/202103_arduino_esp32_ntp_en.htm) also explains how to change the NTP update interval.
 - [Sunton ESP32 2.8 inch 240*320 TFT with Touch](https://wiki.makerfabs.com/Sunton_ESP32_2.8_inch_240x320_TFT_with_Touch.html) describes board and software resources
-- Schematic [page 1](img/schematic1.jpg), [page 2](img/schematic2.jpg)
 
