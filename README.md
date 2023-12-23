@@ -12,11 +12,11 @@ I wanted an NTP clock with time zones and automatic daylight savings time.  I fo
 
 These instructions have been tested with Ubuntu 22.04.3, Windows 10 and Arduino IDE 2.0.2-2.1.1.
 
-- **Remove** brltty, an app for blind people, which interferes with ESP32-2432S028. [Ubuntu only]
+- **Remove** `brltty`, an app for blind people, which interferes with ESP32-2432S028. [Ubuntu only]
 
     `sudo apt purge brltty`
 
-- **Install** pyserial which is required by Arduino IDE. [Ubuntu only]
+- **Install** `pyserial` which is required by Arduino IDE. [Ubuntu only]
 
     `pip install pyserial`
 
