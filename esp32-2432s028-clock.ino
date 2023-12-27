@@ -116,6 +116,7 @@ void setup()
     lv_obj_set_style_text_color(label2, lv_color_hex(0xffffff), LV_PART_MAIN);
     lv_obj_set_size(label2, 320, 80);
     lv_obj_set_pos(label2, 0, (240-80)/2);
+    lv_label_set_long_mode(label2, LV_LABEL_LONG_CLIP);
 
     // Set position and color of location.  Font size is set by style_font1
     label3 = lv_label_create(screenMain);
