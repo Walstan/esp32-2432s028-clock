@@ -12,11 +12,11 @@ I wanted an NTP clock with time zones and automatic daylight savings time.  I fo
 
 These instructions have been tested with Ubuntu 22.04.3, Windows 10 and Arduino IDE 2.0.2-2.1.1.
 
-- [Ubuntu only] **Remove** brltty, an app for blind people, which interferes with ESP32-2432S028.
+- **Remove** `brltty`, an app for blind people, which interferes with ESP32-2432S028. [Ubuntu only]
 
     `sudo apt purge brltty`
 
-- [Ubuntu only] **Install** pyserial which is required by Arduino IDE
+- **Install** `pyserial` which is required by Arduino IDE. [Ubuntu only]
 
     `pip install pyserial`
 
@@ -29,7 +29,7 @@ These instructions have been tested with Ubuntu 22.04.3, Windows 10 and Arduino 
 
     Port is `COM??` [Windows]
 
-    IDE will ask if you want to install esp32 core.  The name has changed so you may have to select `ESP32 Dev Board` and later change to `ESP32 Dev Module`.
+    IDE will ask if you want to install `esp32 core`.  The name has changed so you may have to select `ESP32 Dev Board` and later change to `ESP32 Dev Module`.
 
 - **Install libraries** · Use `Manage Libraries...` to install `LovyanGFX(1.1.9)` and `lvgl(8.3.11)` libraries.
 - **Clone repository**
@@ -38,7 +38,7 @@ These instructions have been tested with Ubuntu 22.04.3, Windows 10 and Arduino 
 
     `git clone https://github.com/alannishioka/esp32-2432s028-clock.git`
 
-- **Copy** `lv_conf.h` to `~/Arduino/libraries/`. This assumes `lvgl` library is in `~/Arduino/libraries/lvgl/`.
+- **Copy** `lv_conf.h` to `~/Arduino/libraries/`. This assumes `lvgl` library is in `~/Arduino/libraries/lvgl/`
 - **Edit** `config.h` to input your WiFi ssid/password.
 
 - **Connect** ESP32-2432S028 to your computer with micro USB cable.
