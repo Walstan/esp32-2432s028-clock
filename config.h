@@ -5,8 +5,8 @@
 
 
 // Enter your wifi credentials here
-const char *SSID = "YOUR_SSID";
-const char *wifi_password = "YOUR_PASSWORD";
+const char *SSID = "UPC5370207";
+const char *wifi_password = "an4tk2mjdkvM";
 
 // NTP server
 const char *ntpServer = "pool.ntp.org";
